@@ -1,5 +1,6 @@
 package boost.map.double2;
 
+import boost.util.NotNull;
 import boost.util.floating.FloatingPointValues;
 
 import java.util.*;
@@ -26,15 +27,15 @@ public class DoubleMapSingle<T> implements DoubleMap<T> {
     public boolean isEmpty()                    { return false; }
     public boolean isZero(double p_precision)   { return Math.abs(o_value) < p_precision; }
     public T getAnyKey()                        { return o_key; }
-    public Set<T> keySet()                      { return Collections.singleton(o_key); }
-    public Map<T, Double> convertToMap()        { return Collections.singletonMap(o_key, o_value); }
+    public @NotNull Set<T> keySet()             { return Collections.singleton(o_key); }
+    public @NotNull Map<T, Double> convertToMap() { return Collections.singletonMap(o_key, o_value); }
 
-    public DoubleMap<T> scale(double p_scale) {
+    public @NotNull DoubleMap<T> scale(double p_scale) {
         if(p_scale == 1.0) return this;
         return new DoubleMapSingle<T>(o_key, o_value*p_scale);
     }
 
-    public DoubleMap<T> getNonZero(double p_precision) {
+    public @NotNull DoubleMap<T> getNonZero(double p_precision) {
         if(isZero(p_precision))
             return DoubleMapFactory.empty();
         return this;

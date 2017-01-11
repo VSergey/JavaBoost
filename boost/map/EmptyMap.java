@@ -1,7 +1,7 @@
 package boost.map;
 
+import boost.util.NotNull;
 import boost.util.iterators.Iterators;
-import com.sun.javafx.beans.annotations.NonNull;
 
 import java.util.*;
 
@@ -25,20 +25,20 @@ class EmptyMap<K,V> implements IReadonlyMap<K,V> {
         return Iterators.empty();
     }
 
-    public @NonNull Collection<V> values() {
-        return Collections.<V>emptyList();
+    public @NotNull Collection<V> values() {
+        return Collections.emptyList();
     }
 
-    public @NonNull Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         return Collections.emptySet();
     }
 
-    public @NonNull Set<Map.Entry<K, V>> entrySet() {
+    public @NotNull Set<Map.Entry<K, V>> entrySet() {
         return Collections.emptySet();
     }
 
-    public void addAllTo(@NonNull Map<K, V> p_map) { }
-    public void addAllValuesTo(@NonNull Collection<V> p_list) { }
+    public void addAllTo(@NotNull Map<K, V> p_map) { }
+    public void addAllValuesTo(@NotNull Collection<V> p_list) { }
 
     public boolean equals(Object o) {
         return (o instanceof Map) && ((Map<?,?>)o).isEmpty();

@@ -1,6 +1,6 @@
 package boost.map;
 
-import com.sun.javafx.beans.annotations.NonNull;
+import boost.util.NotNull;
 
 import java.util.*;
 
@@ -34,14 +34,14 @@ class ReadonlySingleton<K,V> implements IReadonlyMap<K,V> {
     public V getAnyValue() { return o_value; }
     public Map.Entry<K, V> getAny() { return new EntryImpl<K,V>(o_key, o_value); }
 
-    public @NonNull Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         return Collections.singleton(o_key);
     }
 
-    public @NonNull Set<Map.Entry<K, V>> entrySet() {
+    public @NotNull Set<Map.Entry<K, V>> entrySet() {
         if(o_entrySet == null) {
             o_entrySet = new AbstractSet<Entry<K, V>>() {
-                @Override public @NonNull Iterator<Entry<K, V>> iterator() {
+                @Override public @NotNull Iterator<Entry<K, V>> iterator() {
                     return new SingletonIterator();
                 }
                 @Override public int size() { return 1; }
@@ -50,19 +50,19 @@ class ReadonlySingleton<K,V> implements IReadonlyMap<K,V> {
         return o_entrySet;
     }
 
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+    public @NotNull Iterator<Map.Entry<K, V>> iterator() {
         return new SingletonIterator();
     }
 
-    public @NonNull Collection<V> values() {
+    public @NotNull Collection<V> values() {
         return Collections.singletonList(o_value);
     }
 
-    public void addAllTo(@NonNull Map<K, V> p_map) {
+    public void addAllTo(@NotNull Map<K, V> p_map) {
         p_map.put(o_key, o_value);
     }
 
-    public void addAllValuesTo(@NonNull Collection<V> p_list) {
+    public void addAllValuesTo(@NotNull Collection<V> p_list) {
         p_list.add(o_value);
     }
 
@@ -87,7 +87,7 @@ class ReadonlySingleton<K,V> implements IReadonlyMap<K,V> {
 
     public V put(K key, V value) { throw new UnsupportedOperationException(); }
     public V remove(Object key) { throw new UnsupportedOperationException(); }
-    public void putAll(@NonNull Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
+    public void putAll(@NotNull Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
     public void clear() { throw new UnsupportedOperationException(); }
 
     private class SingletonIterator implements Iterator<Map.Entry<K, V>>, Map.Entry<K, V> {

@@ -35,11 +35,6 @@ public class Tuple extends AbstractList {
         return false;
     }
 
-    public boolean equals(Tuple that) {
-        return false;
-    }
-
-
     public @Override int hashCode() {
         if (o_hashcode == 0) {
             for (Object value : o_contents) {
@@ -53,7 +48,7 @@ public class Tuple extends AbstractList {
         return o_hashcode;
     }
 
-    @NotNull public List subList(int fromIndex, int toIndex) {
+    public @NotNull List subList(int fromIndex, int toIndex) {
         int size = toIndex - fromIndex;
         Object[] newContent = new Object[size];
         System.arraycopy(o_contents, fromIndex, newContent, 0, size);

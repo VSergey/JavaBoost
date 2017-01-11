@@ -3,9 +3,9 @@ package boost.list;
 import java.util.List;
 
 public interface Range <T extends Comparable> extends List<T> {
-    Comparable getFrom();
+    T getFrom();
 
-    Comparable getTo();
+    T getTo();
 
     boolean isReverse();
 

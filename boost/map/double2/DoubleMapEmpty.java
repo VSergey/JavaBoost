@@ -19,8 +19,8 @@ public class DoubleMapEmpty<T> implements DoubleMap<T> {
     public DoubleMap<T> getNonZero(double p_precision) { return this; }
 
     public @Override int hashCode()             { return 0; }
-    public @Override boolean equals(Object p_obj){
-        return this == p_obj || p_obj instanceof DoubleMapEmpty;
+    public @Override boolean equals(Object p_obj) {
+        return this == p_obj || p_obj instanceof DoubleMap && ((DoubleMap) p_obj).isEmpty();
     }
     public @Override String toString()          { return "EMPTY"; }
 

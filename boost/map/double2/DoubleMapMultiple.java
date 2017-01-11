@@ -40,7 +40,7 @@ public class DoubleMapMultiple<T> implements DoubleMap<T> {
      *            empty map.
      * @return a new map
      */
-    protected Map<T, double[]> newMapInstance(@NotNull Map<T, double[]> p_map){
+    protected @NotNull Map<T, double[]> newMapInstance(@NotNull Map<T, double[]> p_map){
         return new HashMap<>(p_map);
     }
 
@@ -53,7 +53,7 @@ public class DoubleMapMultiple<T> implements DoubleMap<T> {
         return result == null ? 0d : result[0];
     }
 
-    public Set<T> keySet(){
+    public @NotNull Set<T> keySet(){
         return Collections.unmodifiableSet(o_map.keySet());
     }
 
@@ -93,14 +93,14 @@ public class DoubleMapMultiple<T> implements DoubleMap<T> {
         return false;
     }
 
-    public DoubleMap<T> getNonZero(double p_precision) {
+    public @NotNull DoubleMap<T> getNonZero(double p_precision) {
         if(!isContainsZero(p_precision)) {
             return this;
         }
         return makeNonZero(p_precision);
     }
 
-    protected DoubleMap<T> makeNonZero(double p_precision) {
+    protected @NotNull DoubleMap<T> makeNonZero(double p_precision) {
         Map<T, double[]> res = new HashMap<>();
         for (Map.Entry<T, double[]> entry : o_map.entrySet()) {
             double[] v = entry.getValue();
@@ -110,7 +110,7 @@ public class DoubleMapMultiple<T> implements DoubleMap<T> {
         return DoubleMapFactory.make(res);
     }
 
-    public DoubleMap<T> scale(double p_scale) {
+    public @NotNull DoubleMap<T> scale(double p_scale) {
         if(p_scale == 1.0) return this;
         Map<T, double[]> result = new HashMap<>();
         for (Map.Entry<T, double[]> entry : o_map.entrySet()) {

@@ -1,5 +1,6 @@
 package boost.map.double2;
 
+import boost.util.NotNull;
 import boost.util.floating.FloatingPointValues;
 
 import java.util.*;
@@ -41,21 +42,21 @@ class DoubleMapDual<T> implements DoubleMap<T> {
         return Math.abs(o_value1) < p_precision && Math.abs(o_value2) < p_precision;
     }
 
-    public Set<T> keySet() {
+    public @NotNull Set<T> keySet() {
         Set<T> keys = new HashSet<T>();
         keys.add(o_key1);
         keys.add(o_key2);
         return keys;
     }
 
-    public Map<T, Double> convertToMap() {
+    public @NotNull Map<T, Double> convertToMap() {
         Map<T, Double> res = new HashMap<T, Double>();
         res.put(o_key1, o_value1);
         res.put(o_key2, o_value2);
         return res;
     }
 
-    public DoubleMap<T> getNonZero(double p_precision) {
+    public @NotNull DoubleMap<T> getNonZero(double p_precision) {
         if(Math.abs(o_value1) < p_precision) {
             if( Math.abs(o_value2) < p_precision) return DoubleMapFactory.empty();
             return new DoubleMapSingle<T>(o_key2, o_value2);
@@ -65,7 +66,7 @@ class DoubleMapDual<T> implements DoubleMap<T> {
         return this;
     }
 
-    public DoubleMap<T> scale(double p_scale) {
+    public @NotNull DoubleMap<T> scale(double p_scale) {
         if(p_scale == 1.0) return this;
         return new DoubleMapDual<T>(o_key1, o_value1*p_scale, o_key2, o_value2*p_scale);
     }

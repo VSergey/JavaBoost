@@ -64,8 +64,8 @@ public class IntRange extends AbstractList<Integer> implements Range<Integer> {
                 o_to == p_that.o_to;
     }
 
-    public Comparable getFrom() { return o_from; }
-    public Comparable getTo() { return o_to; }
+    public Integer getFrom() { return o_from; }
+    public Integer getTo() { return o_to; }
 
     public int getFromInt() { return o_from; }
     public int getToInt() { return o_to; }

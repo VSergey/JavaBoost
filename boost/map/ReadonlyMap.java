@@ -1,6 +1,6 @@
 package boost.map;
 
-import com.sun.javafx.beans.annotations.NonNull;
+import boost.util.NotNull;
 
 import java.util.*;
 
@@ -8,7 +8,7 @@ class ReadonlyMap<K,V> implements IReadonlyMap<K,V> {
     private static final long serialVersionUID = 1L;
     private final Map<K,V> o_map;
 
-    ReadonlyMap(@NonNull Map<K, V> p_map) {
+    ReadonlyMap(@NotNull Map<K, V> p_map) {
         if(p_map.isEmpty()) throw new IllegalArgumentException("map can't be empty");
         o_map = p_map;
     }
@@ -36,11 +36,11 @@ class ReadonlyMap<K,V> implements IReadonlyMap<K,V> {
         return o_map.entrySet().iterator().next();
     }
 
-    public @NonNull Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         return Collections.unmodifiableSet(o_map.keySet());
     }
 
-    public @NonNull Set<Map.Entry<K, V>> entrySet() {
+    public @NotNull Set<Map.Entry<K, V>> entrySet() {
         return Collections.unmodifiableSet(o_map.entrySet());
     }
 
@@ -48,15 +48,15 @@ class ReadonlyMap<K,V> implements IReadonlyMap<K,V> {
         return entrySet().iterator();
     }
 
-    public void addAllTo(@NonNull Map<K, V> p_map) {
+    public void addAllTo(@NotNull Map<K, V> p_map) {
         p_map.putAll(o_map);
     }
 
-    public void addAllValuesTo(@NonNull Collection<V> p_list) {
+    public void addAllValuesTo(@NotNull Collection<V> p_list) {
         p_list.addAll(o_map.values());
     }
 
-    public @NonNull Collection<V> values() {
+    public @NotNull Collection<V> values() {
         return Collections.unmodifiableCollection(o_map.values());
     }
 
@@ -76,7 +76,7 @@ class ReadonlyMap<K,V> implements IReadonlyMap<K,V> {
 
     public V put(K key, V value) { throw new UnsupportedOperationException(); }
     public V remove(Object key) { throw new UnsupportedOperationException(); }
-    public void putAll(@NonNull Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
+    public void putAll(@NotNull Map<? extends K, ? extends V> m) { throw new UnsupportedOperationException(); }
     public void clear() {
         throw new UnsupportedOperationException(); }
 }

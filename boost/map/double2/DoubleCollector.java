@@ -1,5 +1,6 @@
 package boost.map.double2;
 
+import boost.util.NotNull;
 import boost.util.floating.FloatingPointValues;
 
 import java.util.*;
@@ -75,7 +76,7 @@ public class DoubleCollector<T> extends DoubleMapMultiple<T> {
      * Compact memory allocation if possible
      * @return new instance if can compact
      */
-    public DoubleMap<T> compact() {
+    public @NotNull DoubleMap<T> compact() {
         return DoubleMapFactory.make(o_map);
     }
 
@@ -93,15 +94,15 @@ public class DoubleCollector<T> extends DoubleMapMultiple<T> {
 
     public void clear() { o_map.clear(); }
 
-    public @Override DoubleMap<T> getNonZero(double p_precision) {
+    public @NotNull @Override DoubleMap<T> getNonZero(double p_precision) {
         return makeNonZero(p_precision);
     }
 
-    public @Override DoubleMap<T> scale(double p_scale) {
+    public @NotNull @Override DoubleMap<T> scale(double p_scale) {
         return scaleCollector(p_scale).compact();
     }
 
-    public DoubleCollector<T> scaleCollector(double p_scale) {
+    public @NotNull DoubleCollector<T> scaleCollector(double p_scale) {
         if(p_scale == 1.0) return this;
         return new DoubleCollector<T>().addAll(this, p_scale);
     }

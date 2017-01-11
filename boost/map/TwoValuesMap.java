@@ -1,6 +1,6 @@
 package boost.map;
 
-import com.sun.javafx.beans.annotations.NonNull;
+import boost.util.NotNull;
 
 import java.util.*;
 
@@ -44,9 +44,9 @@ class TwoValuesMap<K,V> implements IReadonlyMap<K,V> {
     public V getAnyValue() { return o_value1; }
     public Map.Entry<K, V> getAny() { return new EntryImpl<K,V>(o_key1, o_value1); }
 
-    public @NonNull Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         return new AbstractSet<K>() {
-            public @NonNull Iterator<K> iterator() {
+            public @NotNull Iterator<K> iterator() {
                 return new Iterator<K>() {
                     private int i = 0;
                     public void remove() { throw new UnsupportedOperationException(); }
@@ -63,10 +63,10 @@ class TwoValuesMap<K,V> implements IReadonlyMap<K,V> {
         };
     }
 
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public @NotNull Set<Entry<K, V>> entrySet() {
         if(o_entrySet == null) {
             o_entrySet = new AbstractSet<Entry<K, V>>() {
-                public @NonNull Iterator<Entry<K, V>> iterator() {
+                public @NotNull Iterator<Entry<K, V>> iterator() {
                     return TwoValuesMap.this.iterator();
                 }
                 public int size() { return 2; }
@@ -91,11 +91,11 @@ class TwoValuesMap<K,V> implements IReadonlyMap<K,V> {
         };
     }
 
-    public @NonNull Collection<V> values() {
+    public @NotNull Collection<V> values() {
         return new AbstractCollection<V>() {
             public int size() { return 2; }
             public @Override boolean isEmpty() { return false; }
-            public @NonNull Iterator<V> iterator() {
+            public @NotNull Iterator<V> iterator() {
                 return new Iterator<V>() {
                     private int i = 0;
                     public boolean hasNext() { return i < 2; }
@@ -111,7 +111,7 @@ class TwoValuesMap<K,V> implements IReadonlyMap<K,V> {
             public @Override boolean contains(Object p_obj) {
                 return Objects.equals(o_value1, p_obj) || Objects.equals(o_value2, p_obj);
             }
-            public @Override @NonNull Object[] toArray() {
+            public @Override @NotNull Object[] toArray() {
                 return new Object[] {o_value1, o_value2};
             }
             public @Override boolean containsAll(Collection<?> c) {
@@ -153,12 +153,12 @@ class TwoValuesMap<K,V> implements IReadonlyMap<K,V> {
         };
     }
 
-    public void addAllTo(@NonNull Map<K, V> p_map) {
+    public void addAllTo(@NotNull Map<K, V> p_map) {
         p_map.put(o_key1, o_value1);
         p_map.put(o_key2, o_value2);
     }
 
-    public void addAllValuesTo(@NonNull Collection<V> p_list) {
+    public void addAllValuesTo(@NotNull Collection<V> p_list) {
         p_list.add(o_value1);
         p_list.add(o_value2);
     }
