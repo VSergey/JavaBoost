@@ -79,7 +79,7 @@ public class TestReadonlyMapImpl extends TestCase {
         assert "value".equals(map.get("key"));
         assert map.get("key2") == null;
 
-        HashMap<String, String> map1 = new HashMap<String, String>();
+        HashMap<String, String> map1 = new HashMap<>();
         map.addAllTo(map1);
         assert  map1.size()==1;
         assert "value".equals(map1.get("key"));
@@ -92,7 +92,7 @@ public class TestReadonlyMapImpl extends TestCase {
         assert map.equals(singletonMap);
         assert map.hashCode() == singletonMap.hashCode();
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         map.addAllValuesTo(list);
 
         assert map.values().size()==1;
@@ -124,8 +124,8 @@ public class TestReadonlyMapImpl extends TestCase {
     }
 
     public void test_twoValuesMap() throws Exception {
-        IReadonlyMap<String, String> map = new TwoValuesMap<String, String>("key1", "value1", "key2", "value2");
-        IReadonlyMap<String, String> map1 = new TwoValuesMap<String, String>("key2", "value2", "key1", "value1");
+        IReadonlyMap<String, String> map = new TwoValuesMap<>("key1", "value1", "key2", "value2");
+        IReadonlyMap<String, String> map1 = new TwoValuesMap<>("key2", "value2", "key1", "value1");
 
         assert !map.isEmpty();
         assert map.size() == 2;
@@ -151,7 +151,7 @@ public class TestReadonlyMapImpl extends TestCase {
         assert "value2".equals(map.get("key2"));
         assert map.get("key3") == null;
 
-        HashMap<String, String> map2 = new HashMap<String, String>();
+        HashMap<String, String> map2 = new HashMap<>();
         map.addAllTo(map2);
         assert  map2.size()==2;
         assert "value1".equals(map2.get("key1"));
@@ -168,11 +168,11 @@ public class TestReadonlyMapImpl extends TestCase {
         assert map.keySet().equals(map2.keySet());
         assert map1.keySet().equals(map2.keySet());
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         map.addAllValuesTo(list);
         assert list.size()==2;
 
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
         map.addAllValuesTo(set);
         assert set.size()==2;
 
@@ -209,6 +209,84 @@ public class TestReadonlyMapImpl extends TestCase {
     }
 
     public void test_readonlyMap() throws Exception {
+        HashMap<String, String> map2 = new HashMap<>();
+        map2.put("key1", "value1");
+        map2.put("key2", "value2");
+        map2.put("key3", "value3");
+        map2.put("key4", "value2");
+        map2.put("key5", "value1");
+
+        SortedMap<String, String> map1 = new TreeMap<>(map2);
+        IReadonlyMap<String, String> map = new ReadonlyMap<>(map2);
+
+        assert !map.isEmpty();
+        assert map.size() == map2.size();
+
+        assert map.containsKey("key1");
+        assert map.containsKey("key2");
+        assert map.containsKey("key3");
+        assert map.containsKey("key4");
+        assert map.containsKey("key5");
+        assert !map.containsKey(null);
+        assert !map.containsKey("key6");
+
+        assert map.containsValue("value1");
+        assert map.containsValue("value2");
+        assert map.containsValue("value3");
+        assert !map.containsValue("key1");
+        assert !map.containsValue("key2");
+        assert !map.containsValue("value4");
+        assert !map.containsValue(null);
+
+        assert "value1".equals(map.getAnyValue());
+
+        assert map.get(null) == null;
+        assert "value1".equals(map.get("key1"));
+        assert "value1".equals(map.get("key5"));
+        assert "value2".equals(map.get("key2"));
+        assert "value2".equals(map.get("key4"));
+        assert "value3".equals(map.get("key3"));
+        assert map.get("key6") == null;
+
+        assert map.hashCode() == map1.hashCode();
+        assert map.hashCode() == map2.hashCode();
+
+        assert map.equals(map1);
+        assert map.equals(map2);
+        assert map1.equals(map2);
+        assert map.keySet().size()==5;
+        assert map.keySet().equals(map1.keySet());
+        assert map.keySet().equals(map2.keySet());
+        assert map1.keySet().equals(map2.keySet());
+
+        List<String> list = new ArrayList<>();
+        map.addAllValuesTo(list);
+        assert list.size()==5;
+
+        Set<String> set = new HashSet<>();
+        map.addAllValuesTo(set);
+        assert set.size()==3;
+
+        assert map.values().size()==5;
+        assert map.values().containsAll(map2.values());
+
+        assert map.entrySet().size()==5;
+
+        boolean hasException = false;
+        try { map.put(null, null); } catch (UnsupportedOperationException ex) { hasException=true; }
+        assert hasException;
+
+        hasException = false;
+        try { map.remove(null); } catch (UnsupportedOperationException ex) { hasException=true; }
+        assert hasException;
+
+        hasException = false;
+        try { map.clear(); } catch (UnsupportedOperationException ex) { hasException=true; }
+        assert hasException;
+
+        hasException = false;
+        try { map.putAll(new HashMap<String, String>()); } catch (UnsupportedOperationException ex) { hasException=true; }
+        assert hasException;
 
     }
 }
