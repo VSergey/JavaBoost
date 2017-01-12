@@ -285,38 +285,16 @@ public final class Iterators {
         };
     }
 
-    /**
-     * See {@link TestIterators#testGrouping()} for example.
-     * @param <E>
-     * @param p_it
-     * @param p_criteria
-     * @return
-     */
     public static <E> Iterator<Iterator<E>> groupBy(Iterator<E> p_it, GroupCriteria<E> p_criteria) {
         return new GroupingIterator<E>(p_it, p_criteria);
     }
 
-    /**
-     * See {@link TestIterators#testSorting()} for example.
-     * @param <E>
-     * @param p_it
-     * @param p_comparator
-     * @param p_arr
-     * @return
-     */
     public static <E> Iterator<E> sort(Iterator<E> p_it, Comparator<E> p_comparator, E[] p_arr) {
         E[] arr = toArray(p_it, p_arr);
         Arrays.sort(arr, p_comparator);
         return new ArrayIterator<E>(arr);
     }
 
-    /**
-     * See {@link TestIterators#testSorting()} for example.
-     * @param <E>
-     * @param p_it
-     * @param p_arr
-     * @return
-     */
     public static <E extends Comparable<E>> Iterator<E> sort(Iterator<E> p_it, E[] p_arr) {
         E[] arr = toArray(p_it, p_arr);
         Arrays.sort(arr);
