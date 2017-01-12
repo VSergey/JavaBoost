@@ -11,6 +11,10 @@ public class IterableList<T> implements Iterable<T> {
         o_list = p_list;
     }
 
+    public IterableList(Iterable<T> ... p_list) {
+        o_list = Arrays.asList(p_list);
+    }
+
     public Iterator<T> iterator() { return new ListIterator(); }
 
     private class ListIterator implements Iterator<T> {

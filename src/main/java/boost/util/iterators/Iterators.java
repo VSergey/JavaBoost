@@ -132,10 +132,6 @@ public final class Iterators {
         return new CompositeIterator<E>(p_iterators);
     }
 
-    public interface IFilteringFunction<A> {
-        boolean accept(A p_a);
-    }
-
     public static <A> Iterator<A> filter(final Iterator<A> p_iterator, final IFilteringFunction<A> p_filter) {
         return new Iterator<A>() {
             A o_current;
@@ -162,10 +158,6 @@ public final class Iterators {
         };
     }
 
-    public interface IMappingFunction<A, B> {
-        B apply(A p_a);
-    }
-
     public static <A,B> Iterator<B> map(final Iterator<A> p_iterator, final IMappingFunction<A, B> p_func) {
         Iterator<B> it = new Iterator<B>() {
             public boolean hasNext() {
@@ -187,10 +179,6 @@ public final class Iterators {
                 return map(p_iterable.iterator(), p_func);
             }
         };
-    }
-
-    public interface IFlatMapFunction<A, B> {
-        Iterable<B> apply(A a);
     }
 
     public static <A,B> Iterator<B> flatMap(final Iterator<A> p_iterator, final IFlatMapFunction<A,B> p_func) {
@@ -316,4 +304,12 @@ public final class Iterators {
         }
         return result.toArray();
     }
+
+    public static <E> List<E> toList(Iterator<E> p_it) {
+        List<E> result = new ArrayList<>();
+        while (p_it.hasNext())
+            result.add(p_it.next());
+        return result;
+    }
+
 }

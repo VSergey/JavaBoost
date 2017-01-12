@@ -33,7 +33,7 @@ public class EmptyRange extends AbstractList implements Range {
      *
      * @return <code>false</code>
      */
-    public boolean isReverse() { return false;     }
+    public boolean isReverse() { return false; }
 
     /**
      * Never true for an empty range.
@@ -42,9 +42,6 @@ public class EmptyRange extends AbstractList implements Range {
      */
     public boolean containsWithinBounds(Object o) { return false; }
 
-    /**
-     * {@inheritDoc}
-     */
     public @Override String toString() {
         return (null == o_at)
                 ? "null..<null"

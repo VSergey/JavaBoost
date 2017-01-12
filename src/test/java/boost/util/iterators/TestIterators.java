@@ -15,17 +15,8 @@ public class TestIterators extends TestCase {
         return new TestSuite(TestIterators.class);
     }
 
-    private static Object[] toArray(Iterator<?> p_it) {
-        final List<Object> values = new ArrayList<>();
-
-        while (p_it.hasNext())
-            values.add(p_it.next());
-
-        return values.toArray(new Object[values.size()]);
-    }
-
     private static void compare(Object[] p_arr, Iterator<?> p_it) {
-        final Object[] arr = toArray(p_it);
+        final Object[] arr = Iterators.toArray(p_it);
         assertTrue("expected: " + Arrays.toString(p_arr) +
                         ", actual: " + Arrays.toString(arr),
                 Arrays.equals(p_arr, arr));
@@ -50,8 +41,54 @@ public class TestIterators extends TestCase {
         compare(new Object[] {1,2,3,4,5}, Iterators.composite(iters));
 
         compare(new Object[] {},
-                Iterators.composite(Collections.<Iterator<Object>>singletonList(new ArrayIterator<>(new Object[]{})))
+                Iterators.composite(Collections.<Iterator<Object>>singletonList(new ArrayIterator<>(new Object[]{}))));
+        compare(new Object[] {},
+                Iterators.emptyIterable().iterator());
+    }
+
+    public void testCompositeIterator2() {
+        Object[] arr1 = new Object[] {1,2,3};
+        Object[] arr2 = new Object[] {};
+        Object[] arr3 = new Object[] {4,5};
+
+        List<Iterator<Object>> iters = new ArrayList<>();
+        iters.add(new ArrayIterator<>(arr1));
+        iters.add(new ArrayIterator<>(arr2));
+        iters.add(new ArrayIterator<>(arr3));
+
+        compare(new Object[] {1,2,3,4,5}, Iterators.composite(iters.iterator()));
+
+        compare(new Object[] {},
+                Iterators.composite(Collections.<Iterator<Object>>singletonList(new ArrayIterator<>(new Object[]{})).iterator())
         );
+    }
+
+    public void testCompositeIterator3() {
+        List<Integer> l1 = Arrays.asList(1,2,3);
+        List<Integer> l2 = Arrays.asList(4,5);
+
+        compare(new Object[] {1,2,3,4,5}, Iterators.composite(l1.iterator(), l2.iterator()));
+
+        compare(new Object[] {1,2,3,4,5}, Iterators.composite(l1.iterator(), Iterators.twoValues(4,5)));
+
+        compare(new Object[] {1,2,3,4}, Iterators.composite(l1.iterator(), Iterators.singleton(4)));
+
+        compare(new Object[] {1,2,3}, Iterators.composite(l1.iterator(), Iterators.<Iterator<Integer>>empty()));
+
+        compare(new Object[] {0,1,2,3}, Iterators.composite(0, l1.iterator()));
+    }
+
+    public void testUnmodifiable() {
+        List<Integer> list = Arrays.asList(1,2,3);
+        Iterator<Integer> it = Iterators.unmodifiable(list).iterator();
+        it.next();
+        boolean readonly = false;
+        try {
+            it.remove();
+        } catch (UnsupportedOperationException ex) {
+            readonly = true;
+        }
+        assertTrue(readonly);
     }
 
     public void testOrdering() {
@@ -136,11 +173,14 @@ public class TestIterators extends TestCase {
         compare(new Object[] {1,2,3,4,5,6,7,8,9}, Iterators.sort(it, new Integer[] {}));
     }
 
-    private static <E> List<E> toList(Iterator<E> p_it) {
-        List<E> result = new ArrayList<>();
-        while (p_it.hasNext())
-            result.add(p_it.next());
-        return result;
+    public void testCustomSorting() {
+        Iterator<Integer> it = Arrays.asList(1,3,2,7,5,4,9,8,6).iterator();
+        Comparator<Integer> cmp = new Comparator<Integer>() {
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        };
+        compare(new Object[] {9,8,7,6,5,4,3,2,1}, Iterators.sort(it,  cmp, new Integer[] {}));
     }
 
     public void testOrderedMergeIterator() {
@@ -153,22 +193,31 @@ public class TestIterators extends TestCase {
         Iterator<Integer> left = new ArrayIterator<>(new Integer[]{1, 3, 5, 7, 9});
         Iterator<Integer> right = new ArrayIterator<>(new Integer[]{0, 1, 2, 3, 4, 10});
         assertEquals(Arrays.asList(new Integer[] { 0, 1, 1, 2, 3, 3, 4, 5, 7, 9, 10 }),
-                toList(new OrderedMergeIterator<>(left, right, comparator)));
+                Iterators.toList(new OrderedMergeIterator<>(left, right, comparator)));
 
         left = Collections.<Integer>emptyList().iterator();
         right = new ArrayIterator<>(new Integer[]{0});
         assertEquals(Arrays.asList(new Integer[] { 0 }),
-                toList(new OrderedMergeIterator<>(left, right, comparator)));
+                Iterators.toList(new OrderedMergeIterator<>(left, right, comparator)));
 
         left = new ArrayIterator<>(new Integer[]{0});
         right = Collections.<Integer>emptyList().iterator();
         assertEquals(Arrays.asList(new Integer[] { 0 }),
-                toList(new OrderedMergeIterator<>(left, right, comparator)));
+                Iterators.toList(new OrderedMergeIterator<>(left, right, comparator)));
 
         left = Collections.<Integer>emptyList().iterator();
         right = Collections.<Integer>emptyList().iterator();
         assertEquals(Collections.<Integer>emptyList(),
-                toList(new OrderedMergeIterator<>(left, right, comparator)));
+                Iterators.toList(new OrderedMergeIterator<>(left, right, comparator)));
+    }
+
+    public void testFlat() {
+        List<Integer> i1 = Arrays.asList(1, 3, 5, 7, 9);
+        List<Integer> i2 = Arrays.asList(0, 1, 2, 3, 4, 10);
+        List<Integer> i3 = Arrays.asList(15, 21, 33 );
+        List<List<Integer>> iteratorList = Arrays.asList(i1, i2, i3);
+        assertEquals(Arrays.asList(new Integer[] { 1, 3, 5, 7, 9, 0, 1, 2, 3, 4, 10, 15, 21, 33 }),
+                Iterators.toList(Iterators.flat(iteratorList)));
     }
 
     public void testUniqueIterator() {
@@ -179,18 +228,18 @@ public class TestIterators extends TestCase {
         };
 
         assertEquals(Collections.<Integer>emptyList(),
-                toList(new UniqueIterator<>(Collections.<Integer>emptyList().iterator(), comparator)));
+                Iterators.toList(new UniqueIterator<>(Collections.<Integer>emptyList().iterator(), comparator)));
         assertEquals(Collections.singletonList(1),
-                toList(new UniqueIterator<>(Collections.singletonList(1).iterator(), comparator)));
+                Iterators.toList(new UniqueIterator<>(Collections.singletonList(1).iterator(), comparator)));
         assertEquals(Collections.singletonList(1),
-                toList(new UniqueIterator<>(Arrays.asList(new Integer[]{1, 1}).iterator(), comparator)));
+                Iterators.toList(new UniqueIterator<>(Arrays.asList(new Integer[]{1, 1}).iterator(), comparator)));
         assertEquals(Arrays.asList(new Integer[] { 1, 2 }),
-                toList(new UniqueIterator<>(Arrays.asList(new Integer[]{1, 1, 2, 2, 2}).iterator(), comparator)));
+                Iterators.toList(new UniqueIterator<>(Arrays.asList(new Integer[]{1, 1, 2, 2, 2}).iterator(), comparator)));
     }
 
     public void testFiltering() {
         Iterator<Integer> it = Arrays.asList(1,1,2,2,3,4,5,6,7,8,9).iterator();
-        Iterators.IFilteringFunction<Integer> filter = new Iterators.IFilteringFunction<Integer>() {
+        IFilteringFunction<Integer> filter = new IFilteringFunction<Integer>() {
             public boolean accept(Integer p_a) {
                 return p_a % 2 == 0;
             }
@@ -201,7 +250,7 @@ public class TestIterators extends TestCase {
 
     public void testMap() {
         Iterator<Integer> it = Arrays.asList(1,1,2,2,3,4,5,6,null,8,9).iterator();
-        Iterators.IMappingFunction<Integer, String> func = new Iterators.IMappingFunction<Integer, String>() {
+        IMappingFunction<Integer, String> func = new IMappingFunction<Integer, String>() {
             public String apply(Integer p_a) {
                 return p_a == null ? null : p_a.toString();
             }
@@ -211,7 +260,7 @@ public class TestIterators extends TestCase {
 
     public void testFlatMap() {
         Iterator<Integer> it = Arrays.asList(1,2,3,4,5,6,8,9).iterator();
-        Iterators.IFlatMapFunction<Integer, Integer> func = new Iterators.IFlatMapFunction<Integer, Integer>() {
+        IFlatMapFunction<Integer, Integer> func = new IFlatMapFunction<Integer, Integer>() {
             public Iterable<Integer> apply(Integer p_a) {
                 if (p_a == 8)
                     return Collections.emptyList();
@@ -231,7 +280,7 @@ public class TestIterators extends TestCase {
             lst.add(i);
         }
 
-        Iterators.IFlatMapFunction<Integer, Integer> func = new Iterators.IFlatMapFunction<Integer, Integer>() {
+        IFlatMapFunction<Integer, Integer> func = new IFlatMapFunction<Integer, Integer>() {
             public Iterable<Integer> apply(Integer p_a) {
                 List<Integer> doubled = new ArrayList<>();
                 doubled.add(p_a);

@@ -46,8 +46,6 @@ public class FloatingPointValues {
      * the specified accuracy.  This method is NON-TRANSITIVE, i.e. if
      * X = Y, Y = Z, then not necesserily X = Z.
      *
-     * @param p_first
-     * @param p_second
      * @param p_exp must be a positive value
      * @return a result of comparison
      *
@@ -74,8 +72,6 @@ public class FloatingPointValues {
      * Checks if the two specified <code>double</code> values are equal
      * when appropriately rounded.
      *
-     * @param p_first
-     * @param p_second
      * @param p_exp must be between 0 and 15 inclusively
      * @return a result of comparison
      *
@@ -111,7 +107,6 @@ public class FloatingPointValues {
      * Calculates a hash code of the specified <code>double</code> value
      * when the latter is appropriately rounded.
      *
-     * @param p_value
      * @param p_exp must be between 0 and 15 inclusively
      * @return the resulting hash code
      *

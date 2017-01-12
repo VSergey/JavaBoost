@@ -51,6 +51,20 @@ public class TestFloatingPointValues extends TestCase {
         assertTrue(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 15);
     }
 
+    public void testCloseEnough() {
+        double a = 12.7654;
+        // check equalt to self
+        assertTrue(FloatingPointValues.closeEnough(a, a, 3));
+        double b = 12.765;
+        // check a == b
+        assertTrue(FloatingPointValues.closeEnough(a, b, 3));
+        double c = 12.7661;
+        // check a == c
+        assertTrue(FloatingPointValues.closeEnough(c, a, 3));
+        // check transitivity not applied b != c
+        assertTrue(!FloatingPointValues.closeEnough(c, b, 3));
+    }
+
     private static void assertTrue(double p_first, double p_second, int p_exp) {
         assertTrue(p_first + " must be equal to " + p_second,
                 FloatingPointValues.roundedEqual(p_first, p_second, p_exp));

@@ -1,4 +1,4 @@
-package boost.util;
+package boost.set;
 
 public class SimpleBitSet {
     private final static int MAX_SIZE = 64;
@@ -15,12 +15,14 @@ public class SimpleBitSet {
 
     public long bits() { return o_bits; }
 
-    public void set(int p_index) {
+    public SimpleBitSet set(int p_index) {
         o_bits |= bit(p_index);
+        return this;
     }
 
-    public void clear(int p_index) {
+    public SimpleBitSet clear(int p_index) {
         o_bits &= ~bit(p_index);
+        return this;
     }
 
     public boolean get(int p_index) {
@@ -31,16 +33,19 @@ public class SimpleBitSet {
         o_bits = ~o_bits;
     }
 
-    public void and(SimpleBitSet p_bs) {
+    public SimpleBitSet and(SimpleBitSet p_bs) {
         o_bits &= p_bs.o_bits;
+        return this;
     }
 
-    public void or(SimpleBitSet p_bs) {
+    public SimpleBitSet or(SimpleBitSet p_bs) {
         o_bits |= p_bs.o_bits;
+        return this;
     }
 
-    public void xor(SimpleBitSet p_bs) {
+    public SimpleBitSet xor(SimpleBitSet p_bs) {
         o_bits ^= p_bs.o_bits;
+        return this;
     }
 
     private static int bit(int p_index) {
